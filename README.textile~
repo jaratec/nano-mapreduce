@@ -1,21 +1,21 @@
-h2. nano-mapreduce
+h1. nano-mapreduce
 
 A Clojure library for executing map-reduce jobs. As its name implies, it is not design to run on a cluster. Instead it works on a single JVM (machine). Mostly done for (self) educational purposes. There are some accompanying examples showcasing its usage.
 
-h3. Usage
+h2. Usage
 
 The examples can be found in the examples folder. They use the input data from the ./data/in folder.
 
 Add this namespace declaration:
-@(:require [nano-mapreduce.core :as mr])@
+bc. (:require [nano-mapreduce.core :as mr])
 
 Run this way:
-@(mr/exec "path/to/your/json/file" map-function reduce-function)@
+bc. (mr/exec "path/to/your/json/file" map-function reduce-function)
 
 Actually the format of the file is pseudo json. Each line is a json entry.
 Your map and reduce function should return a list of lists (in order to accomodate both jobs that return a result and jobs that return a list of results).
 
-h3. License
+h2. License
 
 Copyright © 2013 jaratec
 
