@@ -1,0 +1,14 @@
+(ns examples.wordcount
+  (:require [nano-mapreduce.core :as mr]))
+
+(defn map-f [tuple]
+  (let [[key values] tuple]
+    (map #([% 1]) values)))
+
+(defn reduce-f [tuple]
+  (let [[key list_of_values] tuple]
+    [key (count list_of_values)]))
+
+;;(mr/exec "../data/in/books.json" map-f reduce-f)
+(mr/exec "data/in/books.json" map-f reduce-f)
+

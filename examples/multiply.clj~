@@ -1,0 +1,25 @@
+(ns examples.multiply
+  (:require [nano-mapreduce.core :as mr]))
+
+;; matrix multiplication
+
+(defn map-f [tuple]
+  (let [[key record] tuple
+        matrix (first record)
+        x (first (rest record)) ;; line coordinate
+        y (first (rest (rest record)))] ;; column coordinate
+    (for [i (range 0 5)]
+      (cond (= "a" matrix) [[x i] record]
+            (= "b" matrix) [[i y] record]))))
+
+(defn reduce-f [tuple]
+  (let [[key list_of_values] tuple ;; key is a vector containing the cell coordinates
+        products (for [i (range 0 5)]
+                   (let [a (first (for [x list_of_values :when (and (= "a" (first x)) (= i (nth x 2)))] (nth x 3))) ;; value is in the 3rd position
+                         b (first (for [x list_of_values :when (and (= "b" (first x)) (= i (nth x 1)))] (nth x 3)))]
+                     (* a b)))
+        sum (apply + products)]
+    [key sum]))
+
+(mr/exec "../data/in/matrix.json" map-f reduce-f)
+;; output should look like ../data/out/multiply.json
